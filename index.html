@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医院建筑智能设计套件 | Hospital Architecture Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Inter"', '"Noto Sans SC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'glass-border': 'rgba(255, 255, 255, 0.2)',
+                        'glass-bg': 'rgba(255, 255, 255, 0.1)',
+                        'med-blue': '#00d2ff',
+                        'med-teal': '#3a7bd5',
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'float-delayed': 'float 8s ease-in-out 4s infinite',
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* 动态背景球体 */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: move 20s infinite alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #3a7bd5; }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #00d2ff; animation-delay: -5s; }
+        .blob-3 { top: 40%; left: 30%; width: 400px; height: 400px; background: #8e44ad; opacity: 0.4; animation-duration: 25s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(30px, -50px) scale(1.1); }
+        }
+
+        /* 玻璃拟态核心样式 */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 40px 0 rgba(0, 210, 255, 0.15);
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        /* 按钮样式 */
+        .glass-btn {
+            background: linear-gradient(90deg, #3a7bd5 0%, #00d2ff 100%);
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .glass-btn:hover {
+            box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* 装饰性网格 */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-med-blue selection:text-white">
+
+    <!-- 背景元素 -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-bg"></div>
+
+    <!-- 导航栏 -->
+    <nav class="w-full fixed top-0 z-50 transition-all duration-300 px-6 py-4 glass-panel border-b-0 border-t-0 border-x-0 rounded-b-2xl mx-auto max-w-7xl inset-x-0 mt-2 sm:mt-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-hospital text-white text-lg"></i>
+                </div>
+                <span class="text-xl font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
+                    Hospital<span class="font-light">Design</span>Suite
+                </span>
+            </div>
+            <div class="hidden md:flex gap-6 text-sm font-medium text-blue-100/80">
+                <a href="#" class="hover:text-white transition-colors">首页</a>
+                <a href="#products" class="hover:text-white transition-colors">产品矩阵</a>
+                <a href="#" class="hover:text-white transition-colors">关于我们</a>
+            </div>
+            <a href="mailto:contact@example.com" class="hidden sm:block px-5 py-2 rounded-full border border-white/20 text-sm hover:bg-white/10 transition-all">
+                联系支持
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <header class="relative pt-40 pb-20 px-6 text-center z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block mb-4 px-4 py-1 rounded-full glass-panel text-xs font-semibold text-cyan-300 tracking-wider uppercase">
+                下一代医疗建筑设计工具
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                重塑 <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500">医疗空间</span><br>
+                的智能未来
+            </h1>
+            <p class="text-lg md:text-xl text-blue-100/70 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                集成空间句法优化、最小面积计算与在线CAD规划。<br>
+                以数据驱动设计，打造高效、人性化的现代化医院建筑。
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#products" class="glass-btn px-8 py-3 rounded-full font-semibold text-white flex items-center justify-center gap-2">
+                    探索工具集 <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 产品展示区 -->
+    <main id="products" class="flex-grow px-6 pb-24 z-10 relative max-w-7xl mx-auto w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- 产品卡片 1: HSO 3.0 -->
+            <div class="glass-card rounded-3xl p-6 flex flex-col h-full group">
+                <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
+                    <i class="fa-solid fa-layer-group text-2xl text-cyan-300"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">HSO 3.0</h3>
+                <p class="text-xs text-blue-300 mb-4 font-mono uppercase tracking-widest">Core System</p>
+                <p class="text-sm text-gray-300 mb-6 flex-grow leading-relaxed">
+                    全新一代医院空间优化系统。基于复杂网络理论，提供更加精准的科室布局与流线分析建议。
+                </p>
+                <a href="https://hszzhua2.github.io/HSO_3.0/" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/20 hover:bg-white/10 flex items-center justify-center gap-2 transition-all text-sm font-medium">
+                    启动原型 <i class="fa-solid fa-external-link-alt text-xs opacity-70"></i>
+                </a>
+            </div>
+
+            <!-- 产品卡片 2: 面积计算器 -->
+            <div class="glass-card rounded-3xl p-6 flex flex-col h-full group">
+                <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
+                    <i class="fa-solid fa-calculator text-2xl text-green-300"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Area Calculator</h3>
+                <p class="text-xs text-green-300 mb-4 font-mono uppercase tracking-widest">Utility</p>
+                <p class="text-sm text-gray-300 mb-6 flex-grow leading-relaxed">
+                    医院功能规划“最小有效建筑面积”计算器。快速测算各功能区所需的标准面积指标。
+                </p>
+                <a href="https://hszzhua2.github.io/hospital_area_calculator/" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/20 hover:bg-white/10 flex items-center justify-center gap-2 transition-all text-sm font-medium">
+                    开始计算 <i class="fa-solid fa-external-link-alt text-xs opacity-70"></i>
+                </a>
+            </div>
+
+            <!-- 产品卡片 3: HSO V2.0 Pro -->
+            <div class="glass-card rounded-3xl p-6 flex flex-col h-full group">
+                <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6 group-hover:bg-purple-500/20 transition-colors">
+                    <i class="fa-solid fa-network-wired text-2xl text-purple-300"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">HSO Optimizer Pro</h3>
+                <p class="text-xs text-purple-300 mb-4 font-mono uppercase tracking-widest">Advanced V2.0</p>
+                <p class="text-sm text-gray-300 mb-6 flex-grow leading-relaxed">
+                    医院空间句法优化器专业版。深度解析空间拓扑结构，为改扩建工程提供科学依据。
+                </p>
+                <a href="https://hszzhua2.github.io/HSO_V2.0/" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/20 hover:bg-white/10 flex items-center justify-center gap-2 transition-all text-sm font-medium">
+                    进入 Pro 版 <i class="fa-solid fa-external-link-alt text-xs opacity-70"></i>
+                </a>
+            </div>
+
+            <!-- 产品卡片 4: HospitalPlanCAD -->
+            <div class="glass-card rounded-3xl p-6 flex flex-col h-full group">
+                <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+                    <i class="fa-solid fa-pen-ruler text-2xl text-orange-300"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">HospitalPlanCAD</h3>
+                <p class="text-xs text-orange-300 mb-4 font-mono uppercase tracking-widest">Design Tool</p>
+                <p class="text-sm text-gray-300 mb-6 flex-grow leading-relaxed">
+                    轻量级在线 CAD 规划工具。支持特定医疗家具模块的快速排布与草图绘制。
+                </p>
+                <a href="https://hszzhua2.github.io/HospitalPlanCAD/" target="_blank" class="mt-auto w-full py-3 rounded-xl border border-white/20 hover:bg-white/10 flex items-center justify-center gap-2 transition-all text-sm font-medium">
+                    开始设计 <i class="fa-solid fa-external-link-alt text-xs opacity-70"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- 装饰统计条 -->
+        <div class="mt-12 glass-panel rounded-2xl p-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50"></div>
+            <div>
+                <div class="text-3xl font-bold text-white mb-1">Intelligent</div>
+                <div class="text-sm text-blue-200">AI 辅助决策</div>
+            </div>
+            <div class="md:border-x border-white/10">
+                <div class="text-3xl font-bold text-white mb-1">Efficient</div>
+                <div class="text-sm text-blue-200">流程效率最大化</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-white mb-1">Precise</div>
+                <div class="text-sm text-blue-200">精确面积控制</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="mt-auto border-t border-white/10 bg-black/20 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-sm text-gray-400">© 2024 Hospital Design Suite. All rights reserved.</p>
+            <div class="flex gap-4">
+                <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors text-white/70 hover:text-white"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors text-white/70 hover:text-white"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors text-white/70 hover:text-white"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 简单的鼠标移动视差效果
+        document.addEventListener('mousemove', (e) => {
+            const blobs = document.querySelectorAll('.blob');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            blobs.forEach((blob, index) => {
+                const speed = (index + 1) * 20;
+                blob.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
