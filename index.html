@@ -267,7 +267,8 @@
 
     <!-- 产品展示区 -->
     <main id="products" class="flex-grow px-6 pb-24 z-10 relative max-w-7xl mx-auto w-full">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Grid 更新为 lg:grid-cols-4 以容纳 8 个产品 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             
             <!-- 产品卡片 1: HSO 3.0 -->
             <div class="glass-card rounded-3xl p-6 flex flex-col h-full group">
@@ -374,6 +375,21 @@
                 </a>
             </div>
 
+            <!-- 产品卡片 8: Web3D Twin (New) -->
+            <div class="glass-card rounded-3xl p-6 flex flex-col h-full group">
+                <div class="w-14 h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center mb-6 group-hover:bg-teal-500/20 transition-colors">
+                    <i class="fa-solid fa-vr-cardboard text-2xl text-teal-400"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-adaptive-main">Smart Dept Twin</h3>
+                <p class="text-xs text-teal-400 mb-4 font-mono uppercase tracking-widest">Web3D Platform</p>
+                <p class="text-sm text-adaptive-muted mb-6 flex-grow leading-relaxed" data-i18n="card_8_desc">
+                    智慧科室 Web3D 数字孪生管理平台。实现科室设备、人员、环境的三维可视化管理与监控。
+                </p>
+                <a href="#" class="mt-auto w-full py-3 rounded-xl border border-gray-400/20 hover:bg-gray-400/10 flex items-center justify-center gap-2 transition-all text-sm font-medium text-adaptive-main">
+                    <span data-i18n="card_8_cta">进入平台</span> <i class="fa-solid fa-external-link-alt text-xs opacity-70"></i>
+                </a>
+            </div>
+
         </div>
 
         <!-- 装饰统计条 -->
@@ -399,9 +415,15 @@
         <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-sm text-adaptive-muted">© 2026 Hospital Design Suite. All rights reserved.</p>
             <div class="flex gap-4">
-                <a href="#" class="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center hover:bg-gray-500/20 transition-colors text-adaptive-muted hover:text-adaptive-main"><i class="fa-brands fa-github"></i></a>
-                <a href="#" class="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center hover:bg-gray-500/20 transition-colors text-adaptive-muted hover:text-adaptive-main"><i class="fa-brands fa-twitter"></i></a>
-                <a href="#" class="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center hover:bg-gray-500/20 transition-colors text-adaptive-muted hover:text-adaptive-main"><i class="fa-solid fa-envelope"></i></a>
+                <a href="https://github.com/hszzhua2" target="_blank" class="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center hover:bg-gray-500/20 transition-colors text-adaptive-muted hover:text-adaptive-main" title="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://www.instagram.com/zf_zhuang/" target="_blank" class="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center hover:bg-gray-500/20 transition-colors text-adaptive-muted hover:text-adaptive-main" title="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/zefeng-zhuang-266a9b204/" target="_blank" class="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center hover:bg-gray-500/20 transition-colors text-adaptive-muted hover:text-adaptive-main" title="LinkedIn">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
             </div>
         </div>
     </footer>
@@ -446,6 +468,8 @@
                 card_6_cta: "开始规划",
                 card_7_desc: "BIM 自动化逻辑演示。展示基于规则的自动化建模与逻辑推演过程。",
                 card_7_cta: "查看演示",
+                card_8_desc: "智慧科室 Web3D 数字孪生管理平台。实现科室设备、人员、环境的三维可视化管理与监控。",
+                card_8_cta: "进入平台",
                 stat_1: "AI 辅助决策",
                 stat_2: "流程效率最大化",
                 stat_3: "精确面积控制"
@@ -475,6 +499,8 @@
                 card_6_cta: "Start Planning",
                 card_7_desc: "BIM Automation Logic Demo. Demonstrates rule-based automated modeling and logic deduction processes.",
                 card_7_cta: "View Demo",
+                card_8_desc: "Smart Department Web3D Digital Twin Platform. 3D visualization and monitoring of department equipment, staff, and environment.",
+                card_8_cta: "Enter Platform",
                 stat_1: "AI-Aided Decision",
                 stat_2: "Max Flow Efficiency",
                 stat_3: "Precise Area Control"
